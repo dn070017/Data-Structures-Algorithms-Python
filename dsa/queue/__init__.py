@@ -1,2 +1,2 @@
 from .LinkedQueue import LinkedQueue
-#from .Queue import Queue
+from .Queue import Queue
