@@ -56,3 +56,5 @@ class LinkedStack(Iterable):
       self.last = node
     self.n += 1
     return
+
+

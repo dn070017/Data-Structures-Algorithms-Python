@@ -54,12 +54,17 @@ class Queue(Iterable):
       self.data.resize(len(self.data) // 2, self.first)
       self.first = 0
       self.last = self.n - 1
+    if self.n == 0:
+      self.first = 0
+      self.last = -1
     return item
 
   def enqueue(self, item: Any) -> None:
     if self.n == len(self.data):
-      self.data.resize(2 * self.n, self.first)
+      self.data.resize(2 * self.n)
     self.last += 1
     self.data[self.last] = item
     self.n += 1
     return
+
+

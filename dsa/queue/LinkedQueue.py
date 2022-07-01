@@ -46,14 +46,18 @@ class LinkedQueue(Iterable):
     item = self.first.item
     self.first = self.first.next_node
     self.n -= 1
+    if self.n == 0:
+      self.last = None
     return item
 
   def enqueue(self, item: Any) -> None:
     node = Node(item)
     if self.is_empty():
       self.first = node
-      self.last = node
     else:
       self.last.next_node = node
+    self.last = node
     self.n += 1
     return
+
+

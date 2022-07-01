@@ -57,3 +57,6 @@ class Stack(Iterable):
     self.data[self.n] = item
     self.n += 1
     return
+
+
+    
