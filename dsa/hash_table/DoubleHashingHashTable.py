@@ -41,7 +41,7 @@ class Pair:
     return f"({self.key}, {self.value})"
   
 class DoubleHashingHashTable(MutableMapping):
-  def __init__(self, size: int = 4):
+  def __init__(self, size: int = 5):
     self.n = 0
     self.n_tombstone = 0
     self.size = size
@@ -50,7 +50,7 @@ class DoubleHashingHashTable(MutableMapping):
   def __setitem__(self, key: Hashable, value: Any) -> None:
     hash_key = hash(key)
     mod_base_1 = self.size
-    mod_base_2 = self.size // 2
+    mod_base_2 = min(self.size, 5)
     mod_hash_key_1 = hash_key % mod_base_1
     mod_hash_key_2 = mod_base_2 - (hash_key % mod_base_2)
     candidate_index = mod_hash_key_1
@@ -63,7 +63,7 @@ class DoubleHashingHashTable(MutableMapping):
         self.table[candidate_index] = pair
         self.n += 1
         if self.alpha >= 0.5:
-          self.resize(self.size * 2)
+          self.resize(self.get_next_prime_number_size(expand=True))
         break
       else:
         candidate_index += mod_hash_key_2
@@ -73,7 +73,7 @@ class DoubleHashingHashTable(MutableMapping):
   def __getitem__(self, key: Hashable) -> Any:
     hash_key = hash(key)
     mod_base_1 = self.size
-    mod_base_2 = self.size // 2
+    mod_base_2 = min(self.size, 5)
     mod_hash_key_1 = hash_key % mod_base_1
     mod_hash_key_2 = mod_base_2 - (hash_key % mod_base_2)
     candidate_index = mod_hash_key_1
@@ -94,7 +94,7 @@ class DoubleHashingHashTable(MutableMapping):
   def __delitem__(self, key: Hashable) -> None:
     hash_key = hash(key)
     mod_base_1 = self.size
-    mod_base_2 = self.size // 2
+    mod_base_2 = min(self.size, 5)
     mod_hash_key_1 = hash_key % mod_base_1
     mod_hash_key_2 = mod_base_2 - (hash_key % mod_base_2)
     candidate_index = mod_hash_key_1
@@ -106,8 +106,8 @@ class DoubleHashingHashTable(MutableMapping):
         self.table[candidate_index] = Tombstone()
         self.n -= 1
         self.n_tombstone += 1
-        if self.alpha - self.alpha_tombstone and self.size > 4:
-          self.resize(self.size // 2)
+        if self.alpha - self.alpha_tombstone and self.size > 5:
+          self.resize(self.get_next_prime_number_size(expand=False))
         return
       else:
         candidate_index += mod_hash_key_2  
@@ -158,3 +158,17 @@ class DoubleHashingHashTable(MutableMapping):
     for key in iterable:
       self[key] = iterable[key]
     return
+
+  def get_next_prime_number_size(self, expand: bool = True) -> int:
+    current_size = self.size
+    while True:
+      if expand:
+        current_size += 1
+      else:
+        current_size -= 1
+      for i in range(2, current_size):
+        if (current_size % i) == 0:
+          break
+      else:
+        return current_size
+
