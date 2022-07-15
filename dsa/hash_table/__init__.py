@@ -1,3 +1,3 @@
 from .DoubleHashingHashTable import DoubleHashingHashTable
 from .LinearProbingHashTable import LinearProbingHashTable
-from .SeparateChanningHashTable import SeparateChanningHashTable
+from .SeparateChainingHashTable import SeparateChainingHashTable

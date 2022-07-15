@@ -43,6 +43,7 @@ class Pair:
 class LinearProbingHashTable(MutableMapping):
   def __init__(self, size: int = 4):
     self.n = 0
+    self.n_tombstone = 0
     self.size = size
     self.table = Array(size)
 
@@ -97,7 +98,8 @@ class LinearProbingHashTable(MutableMapping):
           hash(self.table[candidate_index].key) == hash_key):
         self.table[candidate_index] = Tombstone()
         self.n -= 1
-        if self.alpha < 0.25 and self.size > 4:
+        self.n_tombstone += 1
+        if self.alpha - self.alpha_tombstone < 0.25 and self.size > 4:
           self.resize(self.size // 2)
         return
       else:
@@ -133,10 +135,15 @@ class LinearProbingHashTable(MutableMapping):
 
   @property
   def alpha(self) -> float:
-    return self.n / self.size
+    return (self.n + self.n_tombstone) / self.size
+
+  @property
+  def alpha_tombstone(self) -> float:
+    return self.n_tombstone / self.size
 
   def clear(self) -> None:
     self.n = 0
+    self.n_tombstone = 0
     self.table = Array(self.size)
     return
 

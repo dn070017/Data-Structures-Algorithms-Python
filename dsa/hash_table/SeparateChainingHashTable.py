@@ -4,13 +4,13 @@ from copy import deepcopy
 from dsa.array.Array import Array
 from typing import Any, Optional
 
-class SeparateChanningHashTableIterator(Iterator):
-  def __init__(self, hash_table: SeparateChanningHashTable):
+class SeparateChainingHashTableIterator(Iterator):
+  def __init__(self, hash_table: SeparateChainingHashTable):
     self.current_index = -1
     self.current_pair = None
     self.hash_table = hash_table
 
-  def __iter__(self) -> Iterator[SeparateChanningHashTable]:
+  def __iter__(self) -> Iterator[SeparateChainingHashTable]:
     return self
 
   def __next__(self) -> Hashable:
@@ -37,7 +37,7 @@ class Pair:
   def __str__(self) -> str:
     return f"({self.key}, {self.value}) -> {self.next_pair}"
 
-class SeparateChanningHashTable(MutableMapping):
+class SeparateChainingHashTable(MutableMapping):
   def __init__(self, size: int = 4):
     self.n = 0
     self.size = size
@@ -102,8 +102,8 @@ class SeparateChanningHashTable(MutableMapping):
           break
     raise KeyError(f'{key}')
 
-  def __iter__(self) -> SeparateChanningHashTableIterator[SeparateChanningHashTable]:
-    return SeparateChanningHashTableIterator(self)
+  def __iter__(self) -> SeparateChainingHashTableIterator[SeparateChainingHashTable]:
+    return SeparateChainingHashTableIterator(self)
 
   def __len__(self) -> int:
     return self.n
