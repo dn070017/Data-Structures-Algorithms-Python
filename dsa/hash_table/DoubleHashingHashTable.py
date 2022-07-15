@@ -50,7 +50,7 @@ class DoubleHashingHashTable(MutableMapping):
   def __setitem__(self, key: Hashable, value: Any) -> None:
     hash_key = hash(key)
     mod_base_1 = self.size
-    mod_base_2 = min(self.size, 5)
+    mod_base_2 = (self.size // 2 + 1)
     mod_hash_key_1 = hash_key % mod_base_1
     mod_hash_key_2 = mod_base_2 - (hash_key % mod_base_2)
     candidate_index = mod_hash_key_1
@@ -73,7 +73,7 @@ class DoubleHashingHashTable(MutableMapping):
   def __getitem__(self, key: Hashable) -> Any:
     hash_key = hash(key)
     mod_base_1 = self.size
-    mod_base_2 = min(self.size, 5)
+    mod_base_2 = (self.size // 2 + 1)
     mod_hash_key_1 = hash_key % mod_base_1
     mod_hash_key_2 = mod_base_2 - (hash_key % mod_base_2)
     candidate_index = mod_hash_key_1
@@ -94,7 +94,7 @@ class DoubleHashingHashTable(MutableMapping):
   def __delitem__(self, key: Hashable) -> None:
     hash_key = hash(key)
     mod_base_1 = self.size
-    mod_base_2 = min(self.size, 5)
+    mod_base_2 = (self.size // 2 + 1)
     mod_hash_key_1 = hash_key % mod_base_1
     mod_hash_key_2 = mod_base_2 - (hash_key % mod_base_2)
     candidate_index = mod_hash_key_1
@@ -161,14 +161,17 @@ class DoubleHashingHashTable(MutableMapping):
 
   def get_next_prime_number_size(self, expand: bool = True) -> int:
     current_size = self.size
+    if expand:
+      current_size = current_size * 2
+    else:
+      current_size = current_size // 2
+    if current_size < 5:
+      return 5
     while True:
-      if expand:
-        current_size += 1
-      else:
-        current_size -= 1
       for i in range(2, current_size):
         if (current_size % i) == 0:
           break
       else:
         return current_size
+      current_size += 1
 
