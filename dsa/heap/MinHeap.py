@@ -37,8 +37,8 @@ class MinHeap(Iterable):
     self.n -= 1
     self.heapify_down(1)
     self.data[self.n + 1] = None
-    if self.n > 0 and self.n == (len(self.data) - 1) / 4:
-      self.data.resize(0.5 * len(self.data))
+    if self.n > 0 and self.n <= (len(self.data) - 1) / 4:
+      self.data.resize(int(0.5 * len(self.data)))
     return result
   
   def heapify_up(self, index: int) -> None:
