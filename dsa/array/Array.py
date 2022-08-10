@@ -47,3 +47,9 @@ class Array(MutableSequence):
     self.__data = duplicate
     self.n += 1
     return
+
+  def exchange(self, key_1: int, key_2: int) -> None:
+    tmp = self.__data[key_1]
+    self.__data[key_1] = self.__data[key_2]
+    self.__data[key_2] = tmp
+    return
